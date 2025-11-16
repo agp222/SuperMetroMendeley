@@ -64,4 +64,73 @@ public class ListaSimple {
     public boolean isEmpty() {
         return pFirst == null;
     }
+    
+    
+    /**
+     * Agrega un nuevo nodo con el valor especificado al final de la lista.
+     * @param value el valor a almacenar en el nuevo nodo
+     */
+    public void AgregarNodo(String value) {
+        NodoLista NuevoNodo = new NodoLista(value);
+
+        if (this.isEmpty()) {
+            this.pFirst = NuevoNodo;
+            this.pLast = NuevoNodo;
+        } else {
+            this.pLast.setpNext(NuevoNodo);
+            this.pLast = NuevoNodo;
+        }
+
+        this.size += 1;
+    }
+    
+    /**
+     * Elimina el primer nodo que contiene el valor especificado.
+     * @param value el valor del nodo a eliminar
+     */
+    public void EliminarPorValor(String value) {
+        if (this.isEmpty()) {
+            System.out.println("Esta lista no se puede recorrer porque esta vacia");
+        } else {
+            NodoLista aux = pFirst;
+            NodoLista anterior = null;
+
+            while (aux != null) {
+                if (aux.getValue().equals(value)) {
+                    if (anterior == null) {
+                        pFirst = aux.getpNext();
+                    } else {
+                        anterior.setpNext(aux.getpNext());
+                    }
+
+                    if (aux == pLast) {
+                        pLast = anterior;
+                    }
+
+                    aux.setpNext(null);
+                    this.size--;
+                    break;
+                }
+
+                anterior = aux;
+                aux = aux.getpNext();
+            }
+        }
+    }
+    
+    /**
+    * Verifica si un valor existe en la lista.
+    * @param value el valor a buscar
+    * @return true si el valor existe, false en caso contrario
+    */
+    public boolean contains(String value) {
+       NodoLista aux = pFirst;
+       while (aux != null) {
+           if (aux.getValue().equals(value)) {
+               return true;
+           }
+           aux = aux.getpNext();
+       }
+       return false;
+   }
 }
