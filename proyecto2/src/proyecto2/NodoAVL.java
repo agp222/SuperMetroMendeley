@@ -6,15 +6,15 @@ package proyecto2;
 
 /**
  *
- * @author adcd_
+ * @author Antonio Guzzo
  */
 public class NodoAVL {
     
     // Atributos
-    int valor;
-    int altura;
-    NodoAVL hijoIzquierdo;
-    NodoAVL hijoDerecho;
+    private int valor;
+    private int altura;
+    private NodoAVL hijoIzquierdo;
+    private NodoAVL hijoDerecho;
     
 
     /**
@@ -29,4 +29,38 @@ public class NodoAVL {
         this.hijoIzquierdo = null;
         this.hijoDerecho = null;
     }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public NodoAVL getHijoIzquierdo() {
+        return hijoIzquierdo;
+    }
+
+    public void setHijoIzquierdo(NodoAVL hijoIzquierdo) {
+        this.hijoIzquierdo = hijoIzquierdo;
+    }
+
+    public NodoAVL getHijoDerecho() {
+        return hijoDerecho;
+    }
+
+    public void setHijoDerecho(NodoAVL hijoDerecho) {
+        this.hijoDerecho = hijoDerecho;
+    }
+    
+    
 }
