@@ -14,7 +14,8 @@ public class proyecto2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        interfaz ventana = new interfaz();
+        ventana.setVisible(true);
     }
     
 }
