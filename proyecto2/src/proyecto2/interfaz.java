@@ -24,6 +24,8 @@ public class interfaz extends javax.swing.JFrame {
     public interfaz() {
         initComponents();
     }
+    
+    HashTable tabla;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,7 +151,7 @@ public class interfaz extends javax.swing.JFrame {
         });
         jPanel1.add(Analizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 210, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 450));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -183,6 +185,18 @@ public class interfaz extends javax.swing.JFrame {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             // Selecciono el fichero
             File fichero = fc.getSelectedFile();
+            
+            int lineasTotales = 0;
+            try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
+                while (br.readLine() != null) {
+                    lineasTotales++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            //crear la tabla hash
+            tabla = new HashTable(lineasTotales);
 
             try (FileReader fr = new FileReader(fichero); BufferedReader br = new BufferedReader(fr)) {
                 String linea;
@@ -203,12 +217,26 @@ public class interfaz extends javax.swing.JFrame {
                         resumen = linea.substring(8).trim();
                     } else if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
                         palabrasClave = linea.substring(linea.indexOf(":") + 1).trim();
+                        
+                        int hash = 0;
+                        String[] autoresArray = autores.split(",\\s*");
+                        String[] palabrasArray = palabrasClave.split(",\\s*");
+                        int[] frecuencias = new int[palabrasArray.length];
 
-                        System.out.println("Título: " + titulo);
-                        System.out.println("Autores: " + autores);
-                        System.out.println("Resumen: " + resumen);
-                        System.out.println("Palabras Claves: " + palabrasClave);
-                        System.out.println("-----------------------------------");
+                        //Crea el articulo
+                        Articulo articulo = new Articulo(
+                            hash,
+                            titulo,
+                            autoresArray,
+                            resumen,
+                            palabrasArray,
+                            frecuencias
+                        );
+
+                        //articulo.mostrar();
+                        
+                        //crear el elemento en el hashtable
+                        tabla.insertar(titulo, articulo);
 
                         // Reinicia para el siguiente bloque
                         titulo = "";

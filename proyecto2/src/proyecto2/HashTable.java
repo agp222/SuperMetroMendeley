@@ -30,6 +30,8 @@ public class HashTable {
     
     public boolean insertar(String titulo, Articulo valor) {
         int index = hash(titulo);
+        
+        valor.setHash(index);
         //int index = 00;
         Nodo actual = tabla[index];
 

@@ -19,7 +19,7 @@ package proyecto2;
 public class Articulo {
     
     //Atributos
-    private String hash;
+    private int hash;
     private String titulo;
     private String[] autores;
     private String resumenCompleto;
@@ -37,7 +37,7 @@ public class Articulo {
      * @param palabrasClave palabras clave asociadas
      * @param frecuenciaPalabras frecuencias de cada palabra clave
      */
-    public Articulo(String hash, String titulo, String[] autores, String resumenCompleto, String[] palabrasClave, int[] frecuenciaPalabras) {
+    public Articulo(int hash, String titulo, String[] autores, String resumenCompleto, String[] palabrasClave, int[] frecuenciaPalabras) {
         this.hash = hash;
         this.titulo = titulo;
         this.autores = autores;
@@ -48,9 +48,9 @@ public class Articulo {
 
     /**
      * Obtiene el identificador hash del articulo
-     * @return el hash como {@code String}
+     * @return el hash como {@code int}
      */
-    public String getHash() {
+    public int getHash() {
         return hash;
     }
     
@@ -58,7 +58,7 @@ public class Articulo {
      * Establece el identificador hash del articulo
      * @param hash nuevo valor del hash
      */
-    public void setHash(String hash) {
+    public void setHash(int hash) {
         this.hash = hash;
     }
     
@@ -143,7 +143,16 @@ public class Articulo {
     public void setFrecuenciaPalabras(int[] frecuenciaPalabras) {
         this.frecuenciaPalabras = frecuenciaPalabras;
     }
-
+    
+    
+    public void mostrar(){
+        System.out.println("Artículo creado:");
+        System.out.println("Título: " + this.getTitulo());
+        System.out.println("Autores: " + String.join(", ", this.getAutores()));
+        System.out.println("Resumen: " + this.getResumenCompleto());
+        System.out.println("Palabras Clave: " + String.join(", ", this.getPalabrasClave()));
+        System.out.println("-----------------------------------");
+    }
     
    
     
