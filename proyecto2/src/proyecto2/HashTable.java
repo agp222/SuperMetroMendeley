@@ -20,19 +20,27 @@ public class HashTable {
     }
     
     
-    public boolean insertar(String clave, Articulo valor) {
-        //int index = hash(clave);
-        int index = 00;
+    public int hash(String titulo) {
+        int hash = 0;
+        for (int i = 0; i < titulo.length(); i++) {
+            hash += titulo.charAt(i);
+        }
+        return hash % capacidad;
+    }
+    
+    public boolean insertar(String titulo, Articulo valor) {
+        int index = hash(titulo);
+        //int index = 00;
         Nodo actual = tabla[index];
 
         while (actual != null) {
-            if (actual.getClave().equals(clave)) {
+            if (actual.getClave().equals(titulo)) {
                 return false;
             }
             actual = actual.getSiguiente();
         }
 
-        Nodo nuevo = new Nodo(clave, valor);
+        Nodo nuevo = new Nodo(titulo, valor);
         nuevo.setSiguiente(tabla[index]);
         tabla[index] = nuevo;
         size = size + 1;
