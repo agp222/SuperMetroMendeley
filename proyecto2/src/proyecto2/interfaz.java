@@ -183,21 +183,39 @@ public class interfaz extends javax.swing.JFrame {
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             // Selecciono el fichero
             File fichero = fc.getSelectedFile();
-            String datos = "";
 
             try (FileReader fr = new FileReader(fichero); BufferedReader br = new BufferedReader(fr)) {
-                StringBuilder cadena = new StringBuilder();
                 String linea;
-                int modo = 0;
-                String usuarios="";
+                String titulo = "";
+                String autores = "";
+                String resumen = "";
+                String palabrasClave = "";
 
                 while ((linea = br.readLine()) != null) {
                     linea = linea.trim();
                     if (linea.isEmpty()) continue;
-                    
-                    //logica para guardar informacion
-                    
-                    
+
+                    if (linea.startsWith("Titulo:")) {
+                        titulo = linea.substring(7).trim();
+                    } else if (linea.startsWith("Autores:")) {
+                        autores = linea.substring(8).trim();
+                    } else if (linea.startsWith("Resumen:")) {
+                        resumen = linea.substring(8).trim();
+                    } else if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
+                        palabrasClave = linea.substring(linea.indexOf(":") + 1).trim();
+
+                        System.out.println("Título: " + titulo);
+                        System.out.println("Autores: " + autores);
+                        System.out.println("Resumen: " + resumen);
+                        System.out.println("Palabras Claves: " + palabrasClave);
+                        System.out.println("-----------------------------------");
+
+                        // Reinicia para el siguiente bloque
+                        titulo = "";
+                        autores = "";
+                        resumen = "";
+                        palabrasClave = "";
+                    }
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
