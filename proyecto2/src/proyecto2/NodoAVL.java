@@ -11,10 +11,12 @@ package proyecto2;
 public class NodoAVL {
     
     // Atributos
-    private int valor;
+    private String key;
     private int altura;
-    private NodoAVL hijoIzquierdo;
-    private NodoAVL hijoDerecho;
+    private NodoAVL izquierdo;
+    private NodoAVL derecho;
+    private ListaSimple titulos;
+
     
 
     /**
@@ -23,19 +25,21 @@ public class NodoAVL {
      *
      * @param value El valor que se almacena en el nodo
      */
-    public NodoAVL(int valor) {
-        this.valor = valor;
+    
+    public NodoAVL(String key) {
+        this.key = key;
         this.altura = 1;
-        this.hijoIzquierdo = null;
-        this.hijoDerecho = null;
+        this.izquierdo = null;
+        this.derecho = null;
+        this.titulos = new ListaSimple();
     }
 
-    public int getValor() {
-        return valor;
+    public String getKey() {
+        return key;
     }
 
-    public void setValor(int valor) {
-        this.valor = valor;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public int getAltura() {
@@ -46,21 +50,33 @@ public class NodoAVL {
         this.altura = altura;
     }
 
-    public NodoAVL getHijoIzquierdo() {
-        return hijoIzquierdo;
+    public NodoAVL getIzquierdo() {
+        return izquierdo;
     }
 
-    public void setHijoIzquierdo(NodoAVL hijoIzquierdo) {
-        this.hijoIzquierdo = hijoIzquierdo;
+    public void setIzquierdo(NodoAVL izquierdo) {
+        this.izquierdo = izquierdo;
     }
 
-    public NodoAVL getHijoDerecho() {
-        return hijoDerecho;
+    public NodoAVL getDerecho() {
+        return derecho;
     }
 
-    public void setHijoDerecho(NodoAVL hijoDerecho) {
-        this.hijoDerecho = hijoDerecho;
+    public void setDerecho(NodoAVL derecho) {
+        this.derecho = derecho;
     }
+
+    public ListaSimple getTitulos() {
+        return titulos;
+    }
+
+    public void setTitulos(ListaSimple titulos) {
+        this.titulos = titulos;
+    }
+    
+    
+    
+    
     
     
 }
