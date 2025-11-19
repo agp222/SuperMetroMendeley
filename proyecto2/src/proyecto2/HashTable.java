@@ -49,4 +49,19 @@ public class HashTable {
         return true;
     }
     
+    
+    public Articulo buscar(String titulo) {
+        int index = hash(titulo);
+        Nodo actual = tabla[index];
+
+        while (actual != null) {
+            if (actual.getClave().equals(titulo)) {
+                return actual.getValor();
+            }
+            actual = actual.getSiguiente();
+        }
+
+        return null;
+    }
+    
 }
