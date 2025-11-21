@@ -64,4 +64,32 @@ public class HashTable {
         return null;
     }
     
+    
+    public boolean existe(String titulo) {
+        int index = hash(titulo);
+        Nodo actual = tabla[index];
+
+        while (actual != null) {
+            if (actual.getClave().equals(titulo)) {
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
+        return false;
+    }
+    
+    public String listarArticulos() {
+        String resultado = "";
+
+        for (int i = 0; i < capacidad; i++) {
+            Nodo actual = tabla[i];
+
+            while (actual != null) {
+                resultado += actual.getClave() + "\n";
+                actual = actual.getSiguiente();
+            }
+        }
+
+        return resultado;
+    }
 }
