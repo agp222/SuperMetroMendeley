@@ -234,4 +234,55 @@ public class ArbolAVL {
             inOrdenRec(nodo.getDerecho());
         } 
     }
+    
+    public String[] obtenerInOrdenArray() {
+        ListaSimple lista = obtenerListaDeClaves();
+        String[] arr = new String[lista.getSize()];
+
+        NodoLista actual = lista.getpFirst();
+        int i = 0;
+
+        while (actual != null) {
+            arr[i++] = (String) actual.getValue();
+            actual = actual.getpNext();
+        }
+
+        return arr;
+    }
+    
+    public ListaSimple obtenerListaDeClaves() {
+        ListaSimple lista = new ListaSimple();
+        obtenerClavesRec(root, lista);
+        return lista;
+    }
+
+    private void obtenerClavesRec(NodoAVL nodo, ListaSimple lista) {
+        if (nodo != null) {
+            obtenerClavesRec(nodo.getIzquierdo(), lista);
+            lista.AgregarNodo(nodo.getKey());
+            obtenerClavesRec(nodo.getDerecho(), lista);
+        }
+    }
+
+    
+    public String listarTitulos(String key) {
+        NodoAVL nodo = buscar(key);
+
+        if (nodo == null) {
+            return "No se encontraron investigaciones asociadas.";
+        }
+
+        NodoLista actual = nodo.getTitulos().getpFirst();
+        String resultado = "";
+
+        while (actual != null) {
+            resultado += actual.getValue() + "\n";
+            actual = actual.getpNext();
+        }
+
+        return resultado;
+    }
+    
+    
+    
 }

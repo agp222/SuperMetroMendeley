@@ -26,6 +26,8 @@ public class interfaz extends javax.swing.JFrame {
     }
     
     HashTable tabla;
+    ArbolAVL avlPalabras;
+    ArbolAVL avlAutores;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,7 +42,6 @@ public class interfaz extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         ListarPalabras = new javax.swing.JButton();
-        MostrarInvestigaciones = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         InputBuscador = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -53,10 +54,9 @@ public class interfaz extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         SelectAutores = new javax.swing.JComboBox<>();
         BuscarPorAutor = new javax.swing.JButton();
-        ListaInvestigaciones = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         Analizar1 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -67,7 +67,7 @@ public class interfaz extends javax.swing.JFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, -1, -1));
 
         jLabel2.setText("Listar palabras claves:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, -1, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, 20));
 
         ListarPalabras.setText("Listar");
         ListarPalabras.addActionListener(new java.awt.event.ActionListener() {
@@ -75,15 +75,7 @@ public class interfaz extends javax.swing.JFrame {
                 ListarPalabrasActionPerformed(evt);
             }
         });
-        jPanel1.add(ListarPalabras, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
-
-        MostrarInvestigaciones.setText("Mostrar investigaciones");
-        MostrarInvestigaciones.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MostrarInvestigacionesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(MostrarInvestigaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, -1, -1));
+        jPanel1.add(ListarPalabras, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, -1, -1));
 
         jLabel3.setText("Resultado - Analisis");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, -1));
@@ -92,8 +84,7 @@ public class interfaz extends javax.swing.JFrame {
         jLabel4.setText("Buscar Investigaciones por palabra clave: ");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, 20));
 
-        Investigaciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(Investigaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 210, 110, -1));
+        jPanel1.add(Investigaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, 350, -1));
 
         BuscarPorPalabra.setText("Buscar");
         BuscarPorPalabra.addActionListener(new java.awt.event.ActionListener() {
@@ -111,20 +102,19 @@ public class interfaz extends javax.swing.JFrame {
         });
         jPanel1.add(CargarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
 
-        jLabel5.setText("Buscar Investigaciones por Autor:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, 20));
+        jLabel5.setText("Lista de investigaciones");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, -1, 20));
 
         PantallaResultado.setColumns(20);
         PantallaResultado.setRows(5);
         jScrollPane1.setViewportView(PantallaResultado);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 410, 290));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 650, 280));
 
         jLabel6.setText("Antonio Guzzo");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 560, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, -1, -1));
 
-        SelectAutores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(SelectAutores, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 110, -1));
+        jPanel1.add(SelectAutores, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 230, -1));
 
         BuscarPorAutor.setText("Buscar");
         BuscarPorAutor.addActionListener(new java.awt.event.ActionListener() {
@@ -132,13 +122,7 @@ public class interfaz extends javax.swing.JFrame {
                 BuscarPorAutorActionPerformed(evt);
             }
         });
-        jPanel1.add(BuscarPorAutor, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, -1, -1));
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        ListaInvestigaciones.setViewportView(jTextArea2);
-
-        jPanel1.add(ListaInvestigaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 340, 110));
+        jPanel1.add(BuscarPorAutor, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, -1, -1));
 
         jLabel7.setText("Agregar archivo informacion inicial");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 56, -1, -1));
@@ -149,7 +133,10 @@ public class interfaz extends javax.swing.JFrame {
                 Analizar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(Analizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 210, -1, -1));
+        jPanel1.add(Analizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 210, -1));
+
+        jLabel8.setText("Buscar Investigaciones por Autor:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, -1, 20));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 600));
 
@@ -160,45 +147,34 @@ public class interfaz extends javax.swing.JFrame {
         //
     }//GEN-LAST:event_ListarPalabrasActionPerformed
 
-    private void MostrarInvestigacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarInvestigacionesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MostrarInvestigacionesActionPerformed
-
     private void BuscarPorPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorPalabraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BuscarPorPalabraActionPerformed
 
     private void CargarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarArchivoActionPerformed
-        // Se crea el Objeto JFileChooser
+
         JFileChooser fc = new JFileChooser();
-
-        // Se crea el filtro para que solo se acepte TXT
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
-
-        // Se le indica el filtro
         fc.setFileFilter(filtro);
 
-        // Se abre la ventana, y se guarda la op seleccionada por el usuario
         int seleccion = fc.showOpenDialog(this);
-        
-        // Si el usuario presiona aceptar
+
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-            // Selecciono el fichero
+
             File fichero = fc.getSelectedFile();
-            
+
+            // contar líneas
             int lineasTotales = 0;
             try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
-                while (br.readLine() != null) {
-                    lineasTotales++;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-            //crear la tabla hash
-            tabla = new HashTable(lineasTotales);
+                while (br.readLine() != null) lineasTotales++;
+            } catch (IOException e) {}
 
-            try (FileReader fr = new FileReader(fichero); BufferedReader br = new BufferedReader(fr)) {
+            // inicializar estructuras
+            tabla = new HashTable(lineasTotales);
+            avlPalabras = new ArbolAVL();
+            avlAutores = new ArbolAVL();
+
+            try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
                 String linea;
                 String titulo = "";
                 String autores = "";
@@ -211,21 +187,23 @@ public class interfaz extends javax.swing.JFrame {
 
                     if (linea.startsWith("Titulo:")) {
                         titulo = linea.substring(7).trim();
+
                     } else if (linea.startsWith("Autores:")) {
                         autores = linea.substring(8).trim();
+
                     } else if (linea.startsWith("Resumen:")) {
                         resumen = linea.substring(8).trim();
+
                     } else if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
+
                         palabrasClave = linea.substring(linea.indexOf(":") + 1).trim();
-                        
-                        int hash = 0;
+
                         String[] autoresArray = autores.split(",\\s*");
                         String[] palabrasArray = palabrasClave.split(",\\s*");
                         int[] frecuencias = new int[palabrasArray.length];
 
-                        //Crea el articulo
                         Articulo articulo = new Articulo(
-                            hash,
+                            0,
                             titulo,
                             autoresArray,
                             resumen,
@@ -233,26 +211,50 @@ public class interfaz extends javax.swing.JFrame {
                             frecuencias
                         );
 
-                        //articulo.mostrar();
-                        
-                        //crear el elemento en el hashtable
+                        // insertar en la tabla hash
                         tabla.insertar(titulo, articulo);
 
-                        // Reinicia para el siguiente bloque
+                        // insertar en AVL de palabras
+                        for (String palabra : palabrasArray) {
+                            avlPalabras.insertar(palabra, titulo);
+                        }
+
+                        // insertar en AVL de autores
+                        for (String autor : autoresArray) {
+                            avlAutores.insertar(autor, titulo);
+                        }
+
+                        // limpiar para el siguiente artículo
                         titulo = "";
                         autores = "";
                         resumen = "";
                         palabrasClave = "";
                     }
                 }
-            } catch (IOException e1) {
-                e1.printStackTrace();
+
+            } catch (IOException e1) {}
+            
+            // actualizar JComboBox autores
+            SelectAutores.removeAllItems();
+            String[] autoresAVL = avlAutores.obtenerInOrdenArray();
+            for (String a : autoresAVL){
+                SelectAutores.addItem(a);
             }
-        } else {
-            // Muestra un mensaje de error si no se ha escogido un archivo válido.
+
+            // actualizar JComboBox investigaciones
+            Investigaciones.removeAllItems();
+            ListaSimple listaTitulos = tabla.obtenerListaTitulos();
+            NodoLista aux = listaTitulos.getpFirst();
+            while (aux != null) {
+                Investigaciones.addItem((String) aux.getValue());
+                aux = aux.getpNext();
+            }
+            
+            JOptionPane.showMessageDialog(null, "Información cargada correctamente.");
+        } 
+        else {
             JOptionPane.showMessageDialog(null, "No se escogió un archivo válido");
         }
-        JOptionPane.showMessageDialog(null, "Informacion cargada");
     }//GEN-LAST:event_CargarArchivoActionPerformed
 
     private void BuscarPorAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorAutorActionPerformed
@@ -305,9 +307,7 @@ public class interfaz extends javax.swing.JFrame {
     private javax.swing.JButton CargarArchivo;
     private javax.swing.JTextField InputBuscador;
     private javax.swing.JComboBox<String> Investigaciones;
-    private javax.swing.JScrollPane ListaInvestigaciones;
     private javax.swing.JButton ListarPalabras;
-    private javax.swing.JButton MostrarInvestigaciones;
     private javax.swing.JTextArea PantallaResultado;
     private javax.swing.JComboBox<String> SelectAutores;
     private javax.swing.JLabel jLabel1;
@@ -317,8 +317,8 @@ public class interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 }

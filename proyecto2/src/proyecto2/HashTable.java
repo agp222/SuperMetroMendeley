@@ -92,4 +92,17 @@ public class HashTable {
 
         return resultado;
     }
+    
+    public ListaSimple obtenerListaTitulos() {
+        ListaSimple lista = new ListaSimple();
+
+        for (int i = 0; i < capacidad; i++) {
+            Nodo actual = tabla[i];
+            while (actual != null) {
+                lista.AgregarNodo(actual.getClave());
+                actual = actual.getSiguiente();
+            }
+        }
+        return lista;
+    }
 }
