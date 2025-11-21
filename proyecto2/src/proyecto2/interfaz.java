@@ -269,7 +269,25 @@ public class interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_CargarArchivoActionPerformed
 
     private void BuscarPorAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorAutorActionPerformed
-        // TODO add your handling code here:
+        // Verificar si ya se cargó la info
+        if (avlAutores == null) {
+            PantallaResultado.setText("Primero debe cargar un archivo.");
+            return;
+        }
+
+        // Obtener autor seleccionado
+        String autor = (String) SelectAutores.getSelectedItem();
+
+        if (autor == null || autor.trim().equals("")) {
+            PantallaResultado.setText("Debe seleccionar un autor.");
+            return;
+        }
+
+        // Buscar en el árbol AVL
+        String titulos = avlAutores.listarTitulos(autor);
+
+        // Mostrar resultados
+        PantallaResultado.setText("Investigaciones del autor:\n" + autor + "\n\nInvestigaciones: \n\n" + titulos);
     }//GEN-LAST:event_BuscarPorAutorActionPerformed
 
     private void Analizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Analizar1ActionPerformed
