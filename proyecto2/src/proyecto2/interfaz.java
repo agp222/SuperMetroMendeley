@@ -159,7 +159,36 @@ public class interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_ListarPalabrasActionPerformed
 
     private void BuscarPorPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorPalabraActionPerformed
-        // TODO add your handling code here:
+        // Verificar que el árbol AVL está cargado
+        if (avlPalabras == null) {
+            PantallaResultado.setText("Debe cargar los artículos primero.");
+            return;
+        }
+
+        // Obtener palabra ingresada
+        String palabra = InputBuscador.getText().trim().toLowerCase();
+
+        if (palabra.equals("")) {
+            PantallaResultado.setText("Ingrese una palabra clave.");
+            return;
+        }
+
+        // Buscar en el árbol AVL
+        NodoAVL nodo = avlPalabras.buscar(palabra);
+
+        if (nodo == null) {
+            PantallaResultado.setText("No se encontraron investigaciones para la palabra clave: " + palabra);
+            return;
+        }
+
+        // Obtener todos los títulos asociados
+        String listaTitulos = nodo.getTitulos().listar();
+
+        // Mostrar resultado
+        PantallaResultado.setText(
+            "Investigaciones relacionadas con la palabra clave:\n" +
+            palabra + "\n\n" +
+            listaTitulos);
     }//GEN-LAST:event_BuscarPorPalabraActionPerformed
 
     private void CargarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarArchivoActionPerformed

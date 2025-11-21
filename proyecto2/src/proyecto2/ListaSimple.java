@@ -133,4 +133,17 @@ public class ListaSimple {
        }
        return false;
    }
+    
+    
+    public String listar() {
+        String texto = "";
+        NodoLista aux = pFirst;
+
+        while (aux != null) {
+            texto += "- " + aux.getValue() + "\n";
+            aux = aux.getpNext();
+        }
+
+        return texto;
+    }
 }
