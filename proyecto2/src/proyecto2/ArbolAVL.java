@@ -40,33 +40,33 @@ public class ArbolAVL {
         return altura;
     }
     
-    private NodoAVL rotacionDerecha(NodoAVL y) {
-        NodoAVL x = y.getIzquierdo();
-        NodoAVL T2 = x.getDerecho();
+    private NodoAVL rotacionDerecha(NodoAVL nodoActual) {
+        NodoAVL nodoIzquierdo = nodoActual.getIzquierdo();
+        NodoAVL subArbolDerecho = nodoIzquierdo.getDerecho();
 
         // Rotación
-        x.setDerecho(y);
-        y.setIzquierdo(T2);
+        nodoIzquierdo.setDerecho(nodoActual);
+        nodoActual.setIzquierdo(subArbolDerecho);
 
         // Actualizar alturas
-        y.setAltura(1 + Math.max(obtenerAltura(y.getIzquierdo()), obtenerAltura(y.getDerecho())));
-        x.setAltura(1 + Math.max(obtenerAltura(x.getIzquierdo()), obtenerAltura(x.getDerecho())));
+        nodoActual.setAltura(1 + Math.max(obtenerAltura(nodoActual.getIzquierdo()), obtenerAltura(nodoActual.getDerecho())));
+        nodoIzquierdo.setAltura(1 + Math.max(obtenerAltura(nodoIzquierdo.getIzquierdo()), obtenerAltura(nodoIzquierdo.getDerecho())));
 
-        return x;
+        return nodoIzquierdo;
     }
     
     
-    private NodoAVL rotacionIzquierda(NodoAVL x) {
-        NodoAVL y = x.getDerecho();
-        NodoAVL T2 = y.getIzquierdo();
+    private NodoAVL rotacionIzquierda(NodoAVL nodoActual) {
+        NodoAVL nodoDerecho = nodoActual.getDerecho();
+        NodoAVL subArbolIzquierdo = nodoDerecho.getIzquierdo();
 
-        y.setIzquierdo(x);
-        x.setDerecho(T2);
+        nodoDerecho.setIzquierdo(nodoActual);
+        nodoActual.setDerecho(subArbolIzquierdo);
 
-        x.setAltura(1 + Math.max(obtenerAltura(x.getIzquierdo()), obtenerAltura(x.getDerecho())));
-        y.setAltura(1 + Math.max(obtenerAltura(y.getIzquierdo()), obtenerAltura(y.getDerecho())));
+        nodoActual.setAltura(1 + Math.max(obtenerAltura(nodoActual.getIzquierdo()), obtenerAltura(nodoActual.getDerecho())));
+        nodoDerecho.setAltura(1 + Math.max(obtenerAltura(nodoDerecho.getIzquierdo()), obtenerAltura(nodoDerecho.getDerecho())));
 
-        return y;
+        return nodoDerecho;
     }
     
     public void insertar(String key, String tituloArticulo) {
@@ -86,12 +86,12 @@ public class ArbolAVL {
         }
 
         // Comparación directa con compareTo()
-        int cmp = key.compareTo(nodo.getKey());
+        int comparacion = key.compareTo(nodo.getKey());
 
-        if (cmp < 0) {
+        if (comparacion < 0) {
             nodo.setIzquierdo(insertarRec(nodo.getIzquierdo(), key, tituloArticulo));
         } 
-        else if (cmp > 0) {
+        else if (comparacion > 0) {
             nodo.setDerecho(insertarRec(nodo.getDerecho(), key, tituloArticulo));
         } 
         else {
@@ -126,5 +126,46 @@ public class ArbolAVL {
         }
 
         return nodo;
+    }
+    
+    
+    public NodoAVL buscar(String key) {
+        if (key == null){
+            return null;
+        }else{
+            return buscarRec(root, key.toLowerCase().trim());
+        }
+        
+    }
+
+    private NodoAVL buscarRec(NodoAVL nodo, String key) {
+        if (nodo == null) {
+            return null;
+        }else{
+
+            int comparacion = key.compareTo(nodo.getKey());
+
+            if (comparacion == 0) {
+                return nodo;
+            }
+            if (comparacion < 0) {
+                return buscarRec(nodo.getIzquierdo(), key);
+            }
+            
+            return buscarRec(nodo.getDerecho(), key);
+        }
+    }
+    
+    
+    public void inOrden() {
+        inOrdenRec(root);
+    }
+
+    private void inOrdenRec(NodoAVL nodo) {
+        if (nodo != null){
+            inOrdenRec(nodo.getIzquierdo());
+            System.out.println(nodo.getKey());
+            inOrdenRec(nodo.getDerecho());
+        } 
     }
 }
