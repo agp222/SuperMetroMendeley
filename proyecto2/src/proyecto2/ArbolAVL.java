@@ -9,8 +9,14 @@ package proyecto2;
  * @author Antonio Guzzo
  */
 public class ArbolAVL {
+    
+    //Atributos
     private NodoAVL root;
 
+    
+    /**
+     * Constructor del árbol AVL. Inicializa la raíz como null.
+     */
     public ArbolAVL() {
         root = null;
     }
@@ -24,13 +30,27 @@ public class ArbolAVL {
     }
 
     
+    /**
+     * Obtiene la altura del nodo especificado
+     * 
+     * @param nodo nodo del cual se quiere conocer la altura
+     * @return la altura del nodo o 0 si es null
+     */
     private int obtenerAltura(NodoAVL nodo) {
         if (nodo == null){
             return 0;
+        }else{
+            return nodo.getAltura();
         }
-        return nodo.getAltura();
     }
 
+    /**
+     * Calcula el factor de balance de un nodo
+     * El balance es igual a altura(izquierdo) - altura(derecho)
+     * 
+     * @param nodo nodo al cual se le calcula el balance
+     * @return entero con el valor del balance
+     */
     private int obtenerBalance(NodoAVL nodo) {
         if (nodo == null) {
             return 0;
@@ -40,6 +60,12 @@ public class ArbolAVL {
         return altura;
     }
     
+    /**
+     * Realiza una rotacion simple a la derecha
+     * 
+     * @param nodoActual nodo desbalanceado
+     * @return nuevo nodo raiz del subarbol rotado
+     */
     private NodoAVL rotacionDerecha(NodoAVL nodoActual) {
         NodoAVL nodoIzquierdo = nodoActual.getIzquierdo();
         NodoAVL subArbolDerecho = nodoIzquierdo.getDerecho();
@@ -55,7 +81,12 @@ public class ArbolAVL {
         return nodoIzquierdo;
     }
     
-    
+    /**
+     * Realiza una rotacion simple a la izquierda
+     * 
+     * @param nodoActual nodo desbalanceado
+     * @return nuevo nodo raiz del subarbol rotado
+     */
     private NodoAVL rotacionIzquierda(NodoAVL nodoActual) {
         NodoAVL nodoDerecho = nodoActual.getDerecho();
         NodoAVL subArbolIzquierdo = nodoDerecho.getIzquierdo();
@@ -69,6 +100,14 @@ public class ArbolAVL {
         return nodoDerecho;
     }
     
+    
+    /**
+     * Inserta una clave en el arbol junto con el titulo del articulo donde aparece.
+     * Si la clave existe, solamente agrega el titulo a la lista
+     * 
+     * @param key clave que se desea insertar
+     * @param tituloArticulo título del articulo donde aparece la clave
+     */
     public void insertar(String key, String tituloArticulo) {
         if (key == null || tituloArticulo == null) return;
 
@@ -78,6 +117,14 @@ public class ArbolAVL {
         root = insertarRec(root, key, tituloArticulo);
     }
     
+    /**
+     * Insercion recursiva de claves en el arbol. Se encarga de mantener el balance mediante rotaciones
+     * 
+     * @param nodo nodo actual
+     * @param key clave a insertar
+     * @param tituloArticulo titulo asociado a la clave
+     * @return nodo raiz actualizado del subarbol
+     */
     private NodoAVL insertarRec(NodoAVL nodo, String key, String tituloArticulo) {
         if (nodo == null) {
             NodoAVL nuevo = new NodoAVL(key);
@@ -128,7 +175,12 @@ public class ArbolAVL {
         return nodo;
     }
     
-    
+    /**
+     * Busca una clave dentro del arbol
+     * 
+     * @param key clave que se desea encontrar
+     * @return nodo que contiene la clave, o null si no existe
+     */
     public NodoAVL buscar(String key) {
         if (key == null){
             return null;
@@ -138,6 +190,13 @@ public class ArbolAVL {
         
     }
 
+    /**
+     * Buqueda recursiva de una clave en el arbol
+     * 
+     * @param nodo nodo actual
+     * @param key clave a buscar
+     * @return nodo donde se encuentra la clave o null si no está
+     */
     private NodoAVL buscarRec(NodoAVL nodo, String key) {
         if (nodo == null) {
             return null;
@@ -156,11 +215,18 @@ public class ArbolAVL {
         }
     }
     
-    
+    /**
+     * Realiza un recorrido in-orden del árbol.
+     */
     public void inOrden() {
         inOrdenRec(root);
     }
-
+    
+    /**
+     * Recorrido in-orden recursivo.
+     * 
+     * @param nodo nodo actual.
+     */
     private void inOrdenRec(NodoAVL nodo) {
         if (nodo != null){
             inOrdenRec(nodo.getIzquierdo());
