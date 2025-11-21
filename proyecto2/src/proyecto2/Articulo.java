@@ -154,8 +154,38 @@ public class Articulo {
         System.out.println("-----------------------------------");
     }
     
+    public void analizarFrecuencias() {
+        // Normalizar el texto
+        String texto = resumenCompleto.toLowerCase();
+
+        for (int i = 0; i < palabrasClave.length; i++) {
+            String palabra = palabrasClave[i].toLowerCase().trim();
+            int contador = 0;
+
+            // Buscar ocurrencias sin expresiones regulares
+            int index = texto.indexOf(palabra);
+            while (index != -1) {
+                contador++;
+                index = texto.indexOf(palabra, index + palabra.length());
+            }
+
+            frecuenciaPalabras[i] = contador;
+        }
+    }
+
    
     
-    
+    public String reporteAnalisis() {
+        String resultado = "Análisis del artículo:\n";
+        resultado += "Título: " + titulo + "\n\n";
+        resultado += "Palabras clave:\n";
+
+        for (int i = 0; i < palabrasClave.length; i++) {
+            resultado += "- " + palabrasClave[i] + " → " + frecuenciaPalabras[i] + " ocurrencias\n";
+        }
+
+        return resultado;
+    }
+
    
 }

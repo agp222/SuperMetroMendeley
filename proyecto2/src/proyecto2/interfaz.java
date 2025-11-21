@@ -291,7 +291,33 @@ public class interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_BuscarPorAutorActionPerformed
 
     private void Analizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Analizar1ActionPerformed
-        // TODO add your handling code here:
+        // Asegurar que la tabla hash está cargada
+        if (tabla == null) {
+            PantallaResultado.setText("Primero debe cargar un archivo.");
+            return;
+        }
+
+        // Obtener el título seleccionado en el ComboBox
+        String titulo = (String) Investigaciones.getSelectedItem();
+
+        if (titulo == null || titulo.trim().equals("")) {
+            PantallaResultado.setText("Debe seleccionar un artículo.");
+            return;
+        }
+
+        // Buscar el artículo en la tabla hash
+        Articulo articulo = tabla.buscar(titulo);
+
+        if (articulo == null) {
+            PantallaResultado.setText("El artículo no fue encontrado.");
+            return;
+        }
+
+        // Analizar el resumen
+        articulo.analizarFrecuencias();
+
+        // Mostrar resultado
+        PantallaResultado.setText(articulo.reporteAnalisis());
     }//GEN-LAST:event_Analizar1ActionPerformed
 
     /**
