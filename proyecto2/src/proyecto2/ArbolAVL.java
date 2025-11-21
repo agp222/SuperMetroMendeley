@@ -283,6 +283,22 @@ public class ArbolAVL {
         return resultado;
     }
     
+    public String obtenerInOrden() {
+        return obtenerInOrdenRec(root);
+    }
+
+    private String obtenerInOrdenRec(NodoAVL nodo) {
+        if (nodo == null) {
+            return "";
+        }
+
+        String izquierda = obtenerInOrdenRec(nodo.getIzquierdo());
+        String actual = nodo.getKey() + "\n";
+        String derecha = obtenerInOrdenRec(nodo.getDerecho());
+
+        return izquierda + actual + derecha;
+    }
+
     
     
 }

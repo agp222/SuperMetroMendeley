@@ -144,7 +144,18 @@ public class interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ListarPalabrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListarPalabrasActionPerformed
-        //
+        if (avlPalabras == null) {
+            PantallaResultado.setText("Primero debe cargar un archivo.");
+            return;
+        }
+
+        String lista = avlPalabras.obtenerInOrden();
+
+        if (lista.equals("")) {
+            PantallaResultado.setText("No hay palabras claves registradas.");
+        } else {
+            PantallaResultado.setText(lista);
+        }
     }//GEN-LAST:event_ListarPalabrasActionPerformed
 
     private void BuscarPorPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorPalabraActionPerformed
