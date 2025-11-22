@@ -126,6 +126,8 @@ public class ArbolAVL {
      * @return nodo raiz actualizado del subarbol
      */
     private NodoAVL insertarRec(NodoAVL nodo, String key, String tituloArticulo) {
+        key = (String) normalizar(key.trim()); 
+        tituloArticulo = tituloArticulo.trim();
         if (nodo == null) {
             NodoAVL nuevo = new NodoAVL(key);
             nuevo.getTitulos().AgregarNodo(tituloArticulo);
@@ -202,8 +204,8 @@ public class ArbolAVL {
             return null;
         }else{
 
-            int comparacion = key.compareTo(nodo.getKey());
-
+            int comparacion = normalizar(key).compareTo(normalizar(nodo.getKey()));
+            
             if (comparacion == 0) {
                 return nodo;
             }
@@ -300,5 +302,19 @@ public class ArbolAVL {
     }
 
     
+    private String normalizar(String texto) {
+        texto = texto.toLowerCase();
+
+        texto = texto.replace("á","a")
+                     .replace("é","e")
+                     .replace("í","i")
+                     .replace("ó","o")
+                     .replace("ú","u")
+                     .replace("ü","u")
+                     .replace("ñ","n");
+
+        return texto;
+    }
+
     
 }

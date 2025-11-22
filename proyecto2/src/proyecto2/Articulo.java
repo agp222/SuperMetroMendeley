@@ -155,18 +155,24 @@ public class Articulo {
     }
     
     public void analizarFrecuencias() {
-        // Normalizar el texto
-        String texto = resumenCompleto.toLowerCase();
+        // Limpiar contadores
+        for (int i = 0; i < frecuenciaPalabras.length; i++) {
+            frecuenciaPalabras[i] = 0;
+        }
+
+        // Convertir resumen a minúsculas para evitar fallos
+        String resumenNormalizado = resumenCompleto.toLowerCase();
 
         for (int i = 0; i < palabrasClave.length; i++) {
-            String palabra = palabrasClave[i].toLowerCase().trim();
-            int contador = 0;
+            String palabra = palabrasClave[i].toLowerCase();
 
-            // Buscar ocurrencias sin expresiones regulares
-            int index = texto.indexOf(palabra);
+            // Contar ocurrencias
+            int contador = 0;
+            int index = resumenNormalizado.indexOf(palabra);
+
             while (index != -1) {
                 contador++;
-                index = texto.indexOf(palabra, index + palabra.length());
+                index = resumenNormalizado.indexOf(palabra, index + palabra.length());
             }
 
             frecuenciaPalabras[i] = contador;
@@ -176,15 +182,30 @@ public class Articulo {
    
     
     public String reporteAnalisis() {
-        String resultado = "Análisis del artículo:\n";
-        resultado += "Título: " + titulo + "\n\n";
-        resultado += "Palabras clave:\n";
+        String texto = "";
 
-        for (int i = 0; i < palabrasClave.length; i++) {
-            resultado += "- " + palabrasClave[i] + " → " + frecuenciaPalabras[i] + " ocurrencias\n";
+        texto += "========= REPORTE DE ANÁLISIS =========\n\n";
+        texto += "Título del artículo:\n" + titulo + "\n\n";
+
+        texto += "Autores:\n";
+        for (String a : autores) {
+            texto += "- " + a + "\n";
         }
+        texto += "\n";
 
-        return resultado;
+        texto += "Palabras clave y frecuencia:\n";
+        for (int i = 0; i < palabrasClave.length; i++) {
+            texto += "- " + palabrasClave[i] + ": " + frecuenciaPalabras[i] + "\n";
+        }
+        texto += "\n";
+
+        texto += "Hash del artículo:\n" + hash + "\n\n";
+
+        texto += "Resumen analizado:\n" + resumenCompleto + "\n\n";
+
+        texto += "========================================\n";
+
+        return texto;
     }
 
    

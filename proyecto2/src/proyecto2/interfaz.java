@@ -203,43 +203,67 @@ public class interfaz extends javax.swing.JFrame {
 
             File fichero = fc.getSelectedFile();
 
-            // contar líneas
-            int lineasTotales = 0;
+            int cantidadArticulos = 0;
             try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
-                while (br.readLine() != null) lineasTotales++;
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    linea = linea.trim();
+                    if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
+                        cantidadArticulos++;     // <-- hemos llegado al final de un artículo
+                    }
+                }
             } catch (IOException e) {}
 
-            // inicializar estructuras
-            tabla = new HashTable(lineasTotales);
+            tabla = new HashTable(cantidadArticulos);
             avlPalabras = new ArbolAVL();
             avlAutores = new ArbolAVL();
 
             try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
+
                 String linea;
                 String titulo = "";
                 String autores = "";
-                String resumen = "";
+                StringBuilder resumenSB = new StringBuilder();
                 String palabrasClave = "";
 
+                boolean leyendoResumen = false;
+
                 while ((linea = br.readLine()) != null) {
+
                     linea = linea.trim();
                     if (linea.isEmpty()) continue;
 
                     if (linea.startsWith("Titulo:")) {
                         titulo = linea.substring(7).trim();
+                        continue;
+                    }
 
-                    } else if (linea.startsWith("Autores:")) {
+                    if (linea.startsWith("Autores:")) {
                         autores = linea.substring(8).trim();
+                        continue;
+                    }
 
-                    } else if (linea.startsWith("Resumen:")) {
-                        resumen = linea.substring(8).trim();
+                    if (linea.startsWith("Resumen:")) {
+                        leyendoResumen = true;
+                        resumenSB = new StringBuilder();
+                        resumenSB.append(linea.substring(8).trim()).append(" ");
+                        continue;
+                    }
 
-                    } else if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
+                    if (linea.startsWith("Palabras claves:") || linea.startsWith("Palabras Claves:")) {
 
+                        leyendoResumen = false;
+
+                        String resumen = resumenSB.toString().trim();
                         palabrasClave = linea.substring(linea.indexOf(":") + 1).trim();
 
                         String[] autoresArray = autores.split(",\\s*");
                         String[] palabrasArray = palabrasClave.split(",\\s*");
+
+                        for (int i = 0; i < palabrasArray.length; i++) {
+                            palabrasArray[i] = palabrasArray[i].replaceAll("\\.$", "");
+                        }
+
                         int[] frecuencias = new int[palabrasArray.length];
 
                         Articulo articulo = new Articulo(
@@ -251,45 +275,46 @@ public class interfaz extends javax.swing.JFrame {
                             frecuencias
                         );
 
-                        // insertar en la tabla hash
                         tabla.insertar(titulo, articulo);
 
-                        // insertar en AVL de palabras
                         for (String palabra : palabrasArray) {
-                            avlPalabras.insertar(palabra, titulo);
+                            avlPalabras.insertar(palabra.toLowerCase(), titulo);
                         }
 
-                        // insertar en AVL de autores
                         for (String autor : autoresArray) {
-                            avlAutores.insertar(autor, titulo);
+                            avlAutores.insertar(autor.toLowerCase(), titulo);
                         }
 
-                        // limpiar para el siguiente artículo
                         titulo = "";
                         autores = "";
-                        resumen = "";
+                        resumenSB = new StringBuilder();
                         palabrasClave = "";
+
+                        continue;
+                    }
+
+                    if (leyendoResumen) {
+                        resumenSB.append(linea).append(" ");
                     }
                 }
 
             } catch (IOException e1) {}
-            
-            // actualizar JComboBox autores
+
             SelectAutores.removeAllItems();
             String[] autoresAVL = avlAutores.obtenerInOrdenArray();
             for (String a : autoresAVL){
                 SelectAutores.addItem(a);
             }
 
-            // actualizar JComboBox investigaciones
             Investigaciones.removeAllItems();
             ListaSimple listaTitulos = tabla.obtenerListaTitulos();
             NodoLista aux = listaTitulos.getpFirst();
+
             while (aux != null) {
                 Investigaciones.addItem((String) aux.getValue());
                 aux = aux.getpNext();
             }
-            
+
             JOptionPane.showMessageDialog(null, "Información cargada correctamente.");
         } 
         else {
