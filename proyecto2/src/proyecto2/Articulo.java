@@ -155,29 +155,55 @@ public class Articulo {
     }
     
     public void analizarFrecuencias() {
-        // Limpiar contadores
-        for (int i = 0; i < frecuenciaPalabras.length; i++) {
-            frecuenciaPalabras[i] = 0;
-        }
 
-        // Convertir resumen a minúsculas para evitar fallos
-        String resumenNormalizado = resumenCompleto.toLowerCase();
+        String resumenNorm = normalizar(resumenCompleto);
+
+        String[] palabrasResumen = resumenNorm.split("\\s+");
 
         for (int i = 0; i < palabrasClave.length; i++) {
-            String palabra = palabrasClave[i].toLowerCase();
-
-            // Contar ocurrencias
+            String claveNorm = normalizar(palabrasClave[i]);
             int contador = 0;
-            int index = resumenNormalizado.indexOf(palabra);
 
-            while (index != -1) {
-                contador++;
-                index = resumenNormalizado.indexOf(palabra, index + palabra.length());
+            for (String palabra : palabrasResumen) {
+
+                if (palabra.equals(claveNorm)) {
+                    contador++;
+                }
+
+                // permitir plural automático (opcional pero recomendado)
+                else if (palabra.equals(claveNorm + "s")) {
+                    contador++;
+                }
             }
 
             frecuenciaPalabras[i] = contador;
         }
     }
+    
+    
+    private String normalizar(String texto) {
+        texto = texto.toLowerCase();
+
+        texto = texto.replace("á", "a");
+        texto = texto.replace("é", "e");
+        texto = texto.replace("í", "i");
+        texto = texto.replace("ó", "o");
+        texto = texto.replace("ú", "u");
+        texto = texto.replace("ñ", "n");
+
+        // eliminar signos de puntuación
+        texto = texto.replace(".", " ");
+        texto = texto.replace(",", " ");
+        texto = texto.replace(";", " ");
+        texto = texto.replace(":", " ");
+        texto = texto.replace("(", " ");
+        texto = texto.replace(")", " ");
+        texto = texto.replace("\"", " ");
+        texto = texto.replace("'", " ");
+
+        return texto;
+    }
+
 
    
     
