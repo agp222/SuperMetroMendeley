@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.PrintWriter;
 
 /**
  *
@@ -23,6 +24,7 @@ public class interfaz extends javax.swing.JFrame {
      */
     public interfaz() {
         initComponents();
+        cargarDatosGuardados();
     }
     
     HashTable tabla;
@@ -57,6 +59,7 @@ public class interfaz extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         Analizar1 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        guardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -109,7 +112,7 @@ public class interfaz extends javax.swing.JFrame {
         PantallaResultado.setRows(5);
         jScrollPane1.setViewportView(PantallaResultado);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 650, 280));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 650, 260));
 
         jLabel6.setText("Antonio Guzzo");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, -1, -1));
@@ -138,11 +141,96 @@ public class interfaz extends javax.swing.JFrame {
         jLabel8.setText("Buscar Investigaciones por Autor:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, -1, 20));
 
+        guardar.setText("Salir y guardar");
+        guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 560, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void cargarDatosGuardados() {
+        File archivo = new File("dataGuardada.txt");
+        if (!archivo.exists()) return;
 
+        tabla = new HashTable(2000); 
+        avlPalabras = new ArbolAVL();
+        avlAutores = new ArbolAVL();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+
+            String linea;
+            String titulo = "";
+            String autores = "";
+            StringBuilder resumenSB = new StringBuilder();
+            String palabrasClave = "";
+
+            while ((linea = br.readLine()) != null) {
+
+                linea = linea.trim();
+                if (linea.equals("---")) {
+
+                    String[] autoresArray = autores.split(",\\s*");
+                    String[] palabrasArray = palabrasClave.split(",\\s*");
+                    int[] frecuencias = new int[palabrasArray.length];
+
+                    Articulo articulo = new Articulo(
+                        0, titulo, autoresArray,
+                        resumenSB.toString().trim(),
+                        palabrasArray,
+                        frecuencias
+                    );
+
+                    tabla.insertar(titulo, articulo);
+
+                    for (String p : palabrasArray)
+                        avlPalabras.insertar(p.toLowerCase(), titulo);
+
+                    for (String a : autoresArray)
+                        avlAutores.insertar(a.toLowerCase(), titulo);
+
+                    titulo = "";
+                    autores = "";
+                    resumenSB = new StringBuilder();
+                    palabrasClave = "";
+                    continue;
+                }
+
+                if (linea.startsWith("Titulo:"))
+                    titulo = linea.substring(7).trim();
+                else if (linea.startsWith("Autores:"))
+                    autores = linea.substring(8).trim();
+                else if (linea.startsWith("Resumen:"))
+                    resumenSB.append(linea.substring(8).trim()).append(" ");
+                else if (linea.startsWith("Palabras Claves:"))
+                    palabrasClave = linea.substring(16).trim();
+            }
+
+            // cargar combobox autores
+            SelectAutores.removeAllItems();
+            for (String a : avlAutores.obtenerInOrdenArray())
+                SelectAutores.addItem(a);
+
+            // cargar combobox artículos
+            Investigaciones.removeAllItems();
+            ListaSimple titulos = tabla.obtenerListaTitulos();
+            NodoLista aux = titulos.getpFirst();
+            while (aux != null) {
+                Investigaciones.addItem((String) aux.getValue());
+                aux = aux.getpNext();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error cargando datos: " + e.getMessage());
+        }
+    }
+
+    
     private void ListarPalabrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListarPalabrasActionPerformed
         if (avlPalabras == null) {
             PantallaResultado.setText("Primero debe cargar un archivo.");
@@ -192,7 +280,6 @@ public class interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_BuscarPorPalabraActionPerformed
 
     private void CargarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarArchivoActionPerformed
-
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");
         fc.setFileFilter(filtro);
@@ -203,6 +290,7 @@ public class interfaz extends javax.swing.JFrame {
 
             File fichero = fc.getSelectedFile();
 
+            // contar líneas (para dimensionar HashTable SOLO si está vacía)
             int cantidadArticulos = 0;
             try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
                 String linea;
@@ -214,9 +302,13 @@ public class interfaz extends javax.swing.JFrame {
                 }
             } catch (IOException e) {}
 
-            tabla = new HashTable(cantidadArticulos);
-            avlPalabras = new ArbolAVL();
-            avlAutores = new ArbolAVL();
+            // *** NO BORRAR LO YA CARGADO ***
+            // Solo crear estructuras si es la PRIMERA VEZ
+            if (tabla == null) {
+                tabla = new HashTable(cantidadArticulos);
+                avlPalabras = new ArbolAVL();
+                avlAutores = new ArbolAVL();
+            }
 
             try (BufferedReader br = new BufferedReader(new FileReader(fichero))) {
 
@@ -275,12 +367,15 @@ public class interfaz extends javax.swing.JFrame {
                             frecuencias
                         );
 
+                        // insertar en la tabla hash
                         tabla.insertar(titulo, articulo);
 
+                        // insertar en AVL de palabras
                         for (String palabra : palabrasArray) {
                             avlPalabras.insertar(palabra.toLowerCase(), titulo);
                         }
 
+                        // insertar en AVL de autores
                         for (String autor : autoresArray) {
                             avlAutores.insertar(autor.toLowerCase(), titulo);
                         }
@@ -300,12 +395,14 @@ public class interfaz extends javax.swing.JFrame {
 
             } catch (IOException e1) {}
 
+            // actualizar JComboBox autores
             SelectAutores.removeAllItems();
             String[] autoresAVL = avlAutores.obtenerInOrdenArray();
             for (String a : autoresAVL){
                 SelectAutores.addItem(a);
             }
 
+            // actualizar JComboBox investigaciones
             Investigaciones.removeAllItems();
             ListaSimple listaTitulos = tabla.obtenerListaTitulos();
             NodoLista aux = listaTitulos.getpFirst();
@@ -374,6 +471,33 @@ public class interfaz extends javax.swing.JFrame {
         PantallaResultado.setText(articulo.reporteAnalisis());
     }//GEN-LAST:event_Analizar1ActionPerformed
 
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        File archivo = new File("dataGuardada.txt");
+
+        try (PrintWriter pw = new PrintWriter(archivo)) {
+
+            ListaSimple titulos = tabla.obtenerListaTitulos();
+            NodoLista actual = titulos.getpFirst();
+
+            while (actual != null) {
+                Articulo art = tabla.buscar((String) actual.getValue());
+
+                pw.println("Titulo: " + art.getTitulo());
+                pw.println("Autores: " + String.join(", ", art.getAutores()));
+                pw.println("Resumen: " + art.getResumenCompleto());
+                pw.println("Palabras Claves: " + String.join(", ", art.getPalabrasClave()));
+                pw.println("---");
+
+                actual = actual.getpNext();
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error guardando datos: " + e.getMessage());
+        }
+        
+        System.exit(0);
+    }//GEN-LAST:event_guardarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -419,6 +543,7 @@ public class interfaz extends javax.swing.JFrame {
     private javax.swing.JButton ListarPalabras;
     private javax.swing.JTextArea PantallaResultado;
     private javax.swing.JComboBox<String> SelectAutores;
+    private javax.swing.JButton guardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
