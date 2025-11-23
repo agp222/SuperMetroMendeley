@@ -144,7 +144,9 @@ public class Articulo {
         this.frecuenciaPalabras = frecuenciaPalabras;
     }
     
-    
+    /**
+    * Muestra el articulo en consola
+    */
     public void mostrar(){
         System.out.println("Artículo creado:");
         System.out.println("Título: " + this.getTitulo());
@@ -154,6 +156,10 @@ public class Articulo {
         System.out.println("-----------------------------------");
     }
     
+    /**
+    * Analiza el resumen del artículo y calcula cuántas veces aparece cada palabra clave.
+    * El análisis es sensible a mayúsculas, acentos y plurales simples.
+    */
     public void analizarFrecuencias() {
 
         String resumenNorm = normalizar(resumenCompleto);
@@ -180,7 +186,13 @@ public class Articulo {
         }
     }
     
-    
+    /**
+    * Normaliza una cadena para fines de comparación en el árbol AVL
+    * Convierte la cadena a minúsculas y elimina acentos para asegurar consistencia y orden
+    *
+    * @param string cadena original con posibles acentos o mayúsculas
+    * @return versión normalizada sin acentos y en minúsculas
+    */
     private String normalizar(String texto) {
         texto = texto.toLowerCase();
 
@@ -206,7 +218,12 @@ public class Articulo {
 
 
    
-    
+    /**
+    * Construye un reporte detallado del análisis del artículo, incluyendo:
+    * título, autores, palabras clave, frecuencias y resumen completo.
+    *
+    * @return el texto completo del reporte en formato legible
+    */
     public String reporteAnalisis() {
         String texto = "";
 

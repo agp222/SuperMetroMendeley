@@ -218,25 +218,11 @@ public class ArbolAVL {
     }
     
     /**
-     * Realiza un recorrido in-orden del árbol.
-     */
-    public void inOrden() {
-        inOrdenRec(root);
-    }
-    
-    /**
-     * Recorrido in-orden recursivo.
-     * 
-     * @param nodo nodo actual.
-     */
-    private void inOrdenRec(NodoAVL nodo) {
-        if (nodo != null){
-            inOrdenRec(nodo.getIzquierdo());
-            System.out.println(nodo.getKey());
-            inOrdenRec(nodo.getDerecho());
-        } 
-    }
-    
+    * Obtiene todas las claves almacenadas en el árbol AVL en forma de arreglo
+    * El recorrido se realiza en orden in-orden
+    *
+    * @return arreglo de cadenas en orden alfabético
+    */
     public String[] obtenerInOrdenArray() {
         ListaSimple lista = obtenerListaDeClaves();
         String[] arr = new String[lista.getSize()];
@@ -252,12 +238,25 @@ public class ArbolAVL {
         return arr;
     }
     
+    /**
+    * Obtiene todas las claves del árbol AVL almacenadas dentro de
+    * una ListaSimple, en orden alfabético.
+    *
+    * @return ListaSimple con todas las claves del árbol
+    */
     public ListaSimple obtenerListaDeClaves() {
         ListaSimple lista = new ListaSimple();
         obtenerClavesRec(root, lista);
         return lista;
     }
 
+    /**
+    * Recorre el árbol AVL en orden y almacena cada clave encontrada
+    * dentro de una ListaSimple. Es usado para construir un arreglo ordenado.
+    *
+    * @param nodo nodo actual del recorrido
+    * @param lista lista donde se insertan las claves en orden
+    */
     private void obtenerClavesRec(NodoAVL nodo, ListaSimple lista) {
         if (nodo != null) {
             obtenerClavesRec(nodo.getIzquierdo(), lista);
@@ -266,7 +265,12 @@ public class ArbolAVL {
         }
     }
 
-    
+    /**
+    * Retorna una lista de todos los títulos asociados a una clave del árbol (autor o palabra clave).
+    *
+    * @param key clave a buscar
+    * @return string con los títulos uno por línea, o mensaje si no existe la clave
+    */
     public String listarTitulos(String key) {
         NodoAVL nodo = buscar(key);
 
@@ -285,10 +289,23 @@ public class ArbolAVL {
         return resultado;
     }
     
+    /**
+    * Genera una cadena con todas las claves almacenadas en el árbol AVL
+    * en orden alfabético, utilizando un recorrido in-orden.
+    *
+    * @return string con todas las claves, una por línea
+    */
     public String obtenerInOrden() {
         return obtenerInOrdenRec(root);
     }
 
+    /**
+    * Recorre el árbol AVL en orden (izquierda - raíz - derecha) de manera recursiva.
+    * El resultado se va acumulando en un StringBuilder
+    *
+    * @param nodo nodo actual del recorrido
+    * @return Un String con todas las claves del subárbol ordenadas
+    */
     private String obtenerInOrdenRec(NodoAVL nodo) {
         if (nodo == null) {
             return "";
@@ -301,7 +318,13 @@ public class ArbolAVL {
         return izquierda + actual + derecha;
     }
 
-    
+    /**
+    * Normaliza una cadena para fines de comparación en el árbol AVL
+    * Convierte la cadena a minúsculas y elimina acentos para asegurar consistencia y orden
+    *
+    * @param string cadena original con posibles acentos o mayúsculas
+    * @return versión normalizada sin acentos y en minúsculas
+    */
     private String normalizar(String texto) {
         texto = texto.toLowerCase();
 

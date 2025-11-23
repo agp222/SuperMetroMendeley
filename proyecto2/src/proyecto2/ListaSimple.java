@@ -85,40 +85,6 @@ public class ListaSimple {
     }
     
     /**
-     * Elimina el primer nodo que contiene el valor especificado.
-     * @param value el valor del nodo a eliminar
-     */
-    public void EliminarPorValor(String value) {
-        if (this.isEmpty()) {
-            System.out.println("Esta lista no se puede recorrer porque esta vacia");
-        } else {
-            NodoLista aux = pFirst;
-            NodoLista anterior = null;
-
-            while (aux != null) {
-                if (aux.getValue().equals(value)) {
-                    if (anterior == null) {
-                        pFirst = aux.getpNext();
-                    } else {
-                        anterior.setpNext(aux.getpNext());
-                    }
-
-                    if (aux == pLast) {
-                        pLast = anterior;
-                    }
-
-                    aux.setpNext(null);
-                    this.size--;
-                    break;
-                }
-
-                anterior = aux;
-                aux = aux.getpNext();
-            }
-        }
-    }
-    
-    /**
     * Verifica si un valor existe en la lista.
     * @param value el valor a buscar
     * @return true si el valor existe, false en caso contrario
@@ -134,7 +100,11 @@ public class ListaSimple {
        return false;
    }
     
-    
+    /**
+    * Construye una representación textual de todos los valores de la lista.
+    *
+    * @return string con cada valor en una línea
+    */
     public String listar() {
         String texto = "";
         NodoLista aux = pFirst;
